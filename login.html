@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Language Translator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container login-container">
+        <header>
+            <h1><i class="fas fa-user-circle"></i> Login</h1>
+            <p>Sign in to access your translator settings</p>
+        </header>
+
+        <main class="login-box">
+            <form id="login-form">
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" placeholder="Enter username" required maxlength="50">
+
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" placeholder="Enter password" required maxlength="50">
+
+                <div class="password-row">
+                    <label class="show-password">
+                        <input type="checkbox" id="show-password"> Show password
+                    </label>
+                </div>
+
+                <div class="login-actions">
+                    <button type="submit" class="translate-btn">Sign In</button>
+                    <a href="index.htm" class="link-btn">Cancel</a>
+                </div>
+            </form>
+
+            <div id="login-toast" class="toast"></div>
+        </main>
+
+        <footer>
+            <p>Built with HTML, CSS & JavaScript</p>
+        </footer>
+    </div>
+
+    <script>
+        // Simple client-side login mock. This does NOT authenticate against a server.
+        const form = document.getElementById('login-form');
+        const toast = document.getElementById('login-toast');
+
+        function showToast(msg, timeout = 2500) {
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), timeout);
+        }
+
+        // If already logged in, redirect to translator
+        (function() {
+            const loggedInUser = localStorage.getItem('translatorLoggedInUser') || sessionStorage.getItem('translatorLoggedInUser');
+            if (loggedInUser) {
+                window.location.href = 'index.htm';
+            }
+        })();
+
+        // Toggle password visibility
+        const showPasswordCheckbox = document.getElementById('show-password');
+        const passwordInput = document.getElementById('password');
+        showPasswordCheckbox.addEventListener('change', () => {
+            passwordInput.type = showPasswordCheckbox.checked ? 'text' : 'password';
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                showToast('Please enter username and password');
+                return;
+            }
+
+            // Mock validation: accept any non-empty credentials
+            // Always persist the logged-in user in localStorage for now
+            localStorage.setItem('translatorLoggedInUser', username);
+            showToast('Login successful — redirecting...');
+            setTimeout(() => {
+                window.location.href = 'index.htm';
+            }, 900);
+        });
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</body>
+</html>
